@@ -1,9 +1,6 @@
-const express = require('express')
-const { port } = require('../configs')
+const LiveStreamServer = require('./server')
 
-const app = express()
+const config = require('../configs/index').server
 
-// app.use(bodyParser.json())
-app.use(require('./services/routes'))
-
-app.listen(port, () => console.log(`Server up listening on port ${port}`))
+var server = new LiveStreamServer(config)
+server.run()

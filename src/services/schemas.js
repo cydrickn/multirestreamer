@@ -23,14 +23,14 @@ function generateRequestSchema(contentType, spec) {
     const definition = {
         type: 'object',
         properties: {
-            query: { type: 'object' },
-            path: { type: 'object' },
-            header: { type: 'object' }
+            query: { type: 'object', properties: {} },
+            path: { type: 'object', properties: {} },
+            header: { type: 'object', properties: {} }
         }
     }
     for (const i in specParameters) {
         const param = specParameters[i]
-        definition.properties[param.in].properties = definition.properties[param.in].properties || {}
+        // definition.properties[param.in].properties = definition.properties[param.in].properties || {}
         definition.properties[param.in].properties[param.name] = param.schema
         if (param.required) {
             definition.properties[param.in].required = definition.properties[param.in].required || []
@@ -54,10 +54,27 @@ function generateResponseSchemas(status, contentType, spec) {
         return null
     }
 
-    return lodash.get(spec,`responses.${status}.content.${contentType}.schema`)
+    let schema = lodash.get(spec,`responses.${status}.content.${contentType}.schema`)
+
+    return changeTypeWithNullable(schema)
 }
 
+function changeTypeWithNullable(schema) {
+    if (schema.type === 'object') {
+        schema.properties = lodash.mapValues(schema.properties, (property) => {
+            return changeTypeWithNullable(property)
+        })
+    } else if (schema.type === 'array') {
+        schema.items = changeTypeWithNullable(schema.items)
+    }
 
+    if (schema.nullable) {
+        schema.type = [schema.type, 'null']
+        delete schema.nullable
+    }
+
+    return schema
+}
 
 function generateSchemaData(req) {
     const schema = {

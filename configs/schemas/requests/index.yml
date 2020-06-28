@@ -1,5 +1,39 @@
-default:
-  description: Default
+streams:
+  description: Get All Streams
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                name: { type: string }
+                key: { type: string }
+                title: { type: string }
+                description: { type: string }
+                preview: { type: boolean }
+                relays:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name: { type: string }
+                      url: { type: string }
+                      from: { type: string, nullable: true }
+                      sessionId: { type: string, nullable: true }
+                url: { type: string }
+
+stream:
+  description: Get Stream
+  parameters:
+    - in: path
+      name: name
+      schema:
+        type: string
   responses:
     200:
       description: OK
@@ -9,4 +43,233 @@ default:
             type: object
             additionalProperties: false
             properties:
-              welcome: { type: string }
+              name: { type: string }
+              key: { type: string }
+              title: { type: string }
+              description: { type: string }
+              preview: { type: boolean }
+              relays:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    url: { type: string }
+                    from: { type: string, nullable: true }
+                    sessionId: { type: string, nullable: true }
+              url: { type: string }
+    404:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              code: { type: string, default: STR-2001, example: STR-2001 }
+              message: { type: string, default: Stream not found., example: Stream not found. }
+
+rtmps:
+  description: Get All Streams
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                name: { type: string }
+                title: { type: string }
+                url: { type: string }
+
+rtmp:
+  description: Get Stream
+  parameters:
+    - in: path
+      name: name
+      schema:
+        type: string
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              title: { type: string }
+              url: { type: string }
+    404:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              code: { type: string, default: RTMP-3001, example: RTMP-3001 }
+              message: { type: string, default: RTMP not found., example: RTMP not found. }
+
+updateStream:
+  description: Update Stream
+  parameters:
+    - in: path
+      name: name
+      schema:
+        type: string
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            title: { type: string }
+            description: { type: string }
+            preview: { type: boolean }
+            relays:
+              type: array
+              items:
+                type: object
+                properties:
+                  name: { type: string }
+                  url: { type: string }
+                  from: { type: string, nullable: true }
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              key: { type: string }
+              title: { type: string }
+              description: { type: string }
+              preview: { type: boolean }
+              relays:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    url: { type: string }
+                    from: { type: string, nullable: true }
+                    sessionId: { type: string, nullable: true }
+              url: { type: string }
+
+streamStartPushing:
+  description: Push Live to All Relays
+  parameters:
+    - in: path
+      name: name
+      schema: { type: string }
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              relays:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    url: { type: string }
+                    from: { type: string, nullable: true }
+                    sessionId: { type: string, nullable: true }
+
+
+streamStopPushing:
+  description: Stop all relay pushing
+  parameters:
+    - in: path
+      name: name
+      schema:
+        type: string
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              relays:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    url: { type: string }
+                    from: { type: string, nullable: true }
+                    sessionId: { type: string, nullable: true }
+
+streamRelayStartPushing:
+  description: Start pushing specific relay
+  parameters:
+    - in: path
+      name: name
+      schema: { type: string }
+    - in: path
+      name: relay
+      schema: { type: string }
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              relay:
+                type: object
+                properties:
+                  name: { type: string }
+                  url: { type: string }
+                  from: { type: string, nullable: true }
+                  sessionId: { type: string, nullable: true }
+
+streamRelayStopPushing:
+  description: Start pushing specific relay
+  parameters:
+    - in: path
+      name: name
+      schema: { type: string }
+    - in: path
+      name: relay
+      schema: { type: string }
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              name: { type: string }
+              relay:
+                type: object
+                properties:
+                  name: { type: string }
+                  url: { type: string }
+                  from: { type: string, nullable: true }
+                  sessionId: { type: string, nullable: true }

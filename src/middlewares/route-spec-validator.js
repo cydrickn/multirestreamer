@@ -3,6 +3,11 @@ const lodash = require('lodash')
 const schemas = require('../services/schemas')
 
 exports.validateRequest = function (options) {
+    if (options.spec === null) {
+        return (req, res, next) => {
+            next()
+        }
+    }
     const spec = lodash.get(schemas.requestSpecs, options.spec)
 
     return (req, res, next) => {
@@ -21,6 +26,11 @@ exports.validateRequest = function (options) {
 }
 
 exports.validateResponse = function (options) {
+    if (options.spec === null) {
+        return (req, res, next) => {
+            next()
+        }
+    }
     const spec = lodash.get(schemas.requestSpecs, options.spec)
 
     return (req, res, next) => {

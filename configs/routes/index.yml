@@ -1,5 +1,78 @@
-default:
-  path: /
+streams:
+  path: /v1/streams
   methods: [GET]
-  controller: default
-  spec: default
+  controller: streams
+  spec: streams
+
+stream:
+  path: /v1/streams/:name
+  methods: [GET]
+  controller: stream
+  spec: stream
+
+streamStats:
+  path: /v1/streams/:name/stats
+  methods: [GET]
+  controller: streamStats
+  spec: null
+
+updateStream:
+  path: /v1/streams/:name
+  methods: [POST]
+  controller: updateStream
+  spec: updateStream
+
+streamStartPushing:
+  path: /v1/streams/:name/start-push
+  methods: [POST]
+  controller: null
+  spec: streamStartPushing
+
+streamStopPushing:
+  path: /v1/streams/:name/stop-push
+  methods: [POST]
+  controller: null
+  spec: streamStopPushing
+
+streamRelayStartPushing:
+  path: /v1/streams/:name/relays/:relay/start-push
+  methods: [POST]
+  controller: relayStartPushing
+  spec: streamRelayStartPushing
+
+streamRelayStopPushing:
+  path: /v1/streams/:name/relays/:relay/stop-push
+  methods: [POST]
+  controller: null
+  spec: streamRelayStopPushing
+
+rtmps:
+  path: /v1/rtmps
+  methods: [GET]
+  controller: rtmps
+  spec: rtmps
+
+rtmp:
+  path: /v1/rtmps/:name
+  methods: [GET]
+  controller: rtmp
+  spec: rtmp
+
+#
+#saveStreams:
+#  path: /streams
+#  methods: [POST]
+#  controller: saveStreams
+#  spec: saveStreams
+#
+#live:
+#  path: /live
+#  methods: [POST]
+#  controller: live
+#  spec: live
+
+docs:
+  path: /docs.json
+  methods: [GET]
+  controller: docs
+  spec: null
